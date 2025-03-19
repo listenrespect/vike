@@ -297,7 +297,8 @@ function hookClientOnlyExists(
 
 async function fetchPageContextFromServer(pageContext: { urlOriginal: string; _urlRewrite: string | null }) {
   const pageContextUrl = getPageContextRequestUrl(pageContext._urlRewrite ?? pageContext.urlOriginal)
-  const response = await fetch(pageContextUrl)
+  // To avoid the issue of not having the latest content when requesting '.pageContextion.json', cache processing measures have been added.
+  const response = await fetch(pageContextUrl, { headers: { 'cache-control': 'max-age=0' } })
 
   {
     const contentType = response.headers.get('content-type')
